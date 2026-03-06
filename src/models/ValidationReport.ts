@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * CE-RISE Hex Core Service API
+ * CE-RISE Hexagonal Core Service API
  * Public and admin API for validating, creating, and querying records against versioned CE-RISE model artifacts.
  *
  * The version of the OpenAPI document: 0.0.1

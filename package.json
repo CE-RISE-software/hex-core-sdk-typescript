@@ -1,6 +1,6 @@
 {
   "name": "@ce-rise/hex-core-sdk",
-  "version": "0.0.0-commit.115",
+  "version": "0.0.0-commit.120",
   "description": "OpenAPI client for @ce-rise/hex-core-sdk",
   "author": "OpenAPI-Generator",
   "repository": {
