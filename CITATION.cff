@@ -11,7 +11,7 @@ authors:
     orcid: 'https://orcid.org/0000-0002-7468-9096'
     affiliation: NILU
 repository-code: 'https://codeberg.org/CE-RISE-software/hex-core-sdk-typescript'
-url: 'https://pkg.go.dev/github.com/CE-RISE-software/hex-core-sdk-typescript'
+url: 'https://www.npmjs.com/package/@ce-rise/hex-core-sdk-typescript'
 abstract: >-
   OpenAPI-generated TypeScript SDK for the CE-RISE Hex Core microservice API, providing
   typed clients for admin, discovery, and model operations in step with the

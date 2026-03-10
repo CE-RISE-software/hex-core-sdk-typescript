@@ -1,5 +1,6 @@
 # CE-RISE TypeScript Software Development Kit for Hexagonal Core Service
 
+[![NPM](https://nodei.co/npm/@ce-rise/hex-core-sdk-typescript.svg?style=shields)](https://www.npmjs.com/package/@ce-rise/hex-core-sdk-typescript)
 [![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED)
 
 A TypeScript SDK for the CE-RISE Hex Core Service:
@@ -10,13 +11,13 @@ https://codeberg.org/CE-RISE-software/hex-core-service
 Install from npm:
 
 ```bash
-npm install "ce-rise-hex-core-sdk"
+npm install "@ce-rise/hex-core-sdk-typescript"
 ```
 
 Install a specific version:
 
 ```bash
-npm install "ce-rise-hex-core-sdk@0.0.1"
+npm install "@ce-rise/hex-core-sdk-typescript@0.0.1"
 ```
 
 ## Quickstart
@@ -24,22 +25,65 @@ npm install "ce-rise-hex-core-sdk@0.0.1"
 ### 1) Configure client and call public endpoints
 
 ```ts
+import { Configuration, DiscoveryApi } from "@ce-rise/hex-core-sdk-typescript";
 
+const config = new Configuration({
+  basePath: "https://your-hex-core-service.example.org"
+});
+
+const discoveryApi = new DiscoveryApi(config);
+const models = await discoveryApi.listModels();
+console.log(models);
 ```
 
 ### 2) Configure bearer token for protected endpoints
 
+```ts
+import { AdminApi, Configuration } from "@ce-rise/hex-core-sdk-typescript";
 
+const config = new Configuration({
+  basePath: "https://your-hex-core-service.example.org",
+  accessToken: process.env.HEX_CORE_TOKEN
+});
+
+const adminApi = new AdminApi(config);
+const status = await adminApi.status();
+console.log(status);
+```
 
 ### 3) Validate and create records
 
+```ts
+import { Configuration, ModelsApi } from "@ce-rise/hex-core-sdk-typescript";
 
+const config = new Configuration({
+  basePath: "https://your-hex-core-service.example.org",
+  accessToken: process.env.HEX_CORE_TOKEN
+});
+
+const modelsApi = new ModelsApi(config);
+
+const report = await modelsApi.validateModelPayload({
+  model: "model-a",
+  version: "1.0.0",
+  validateRequest: { payload: { x: 1 } }
+});
+
+const created = await modelsApi.createRecord({
+  model: "model-a",
+  version: "1.0.0",
+  idempotencyKey: "my-key-123",
+  createRequest: { payload: { x: 1 } }
+});
+
+console.log(report, created);
+```
 
 ## API Documentation
 
 - Generated docs website: https://ce-rise-software.codeberg.page/hex-core-sdk-typescript/
 - Local API docs:
-  - `docs/apis/dminApi.md`
+  - `docs/apis/AdminApi.md`
   - `docs/apis/DiscoveryApi.md`
   - `docs/apis/ModelsApi.md`
 
