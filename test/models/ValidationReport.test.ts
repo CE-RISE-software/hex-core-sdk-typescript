@@ -1,7 +1,9 @@
 import * as Models from "../../src/models";
 
-describe("model export: ValidationReport", () => {
-  it("is exported", () => {
-    expect((Models as Record<string, unknown>)["ValidationReport"]).toBeDefined();
+describe("model helpers: ValidationReport", () => {
+  it("exports runtime helper functions", () => {
+    expect((Models as Record<string, unknown>)["instanceOfValidationReport"]).toBeDefined();
+    expect((Models as Record<string, unknown>)["ValidationReportFromJSON"]).toBeDefined();
+    expect((Models as Record<string, unknown>)["ValidationReportToJSON"]).toBeDefined();
   });
 });
