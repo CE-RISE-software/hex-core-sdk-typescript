@@ -1,6 +1,6 @@
 {
   "name": "hex-core-sdk-typescript",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Generated TypeScript SDK for CE-RISE Hex Core API",
   "main": "dist/src/index.js",
