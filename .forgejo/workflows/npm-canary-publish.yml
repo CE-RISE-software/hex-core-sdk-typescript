@@ -1,0 +1,72 @@
+name: NPM Canary Publish Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  canary-publish:
+    runs-on: codeberg-small
+
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: https://github.com/actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify npm auth
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm whoami
+          npm ping
+
+      - name: Run tests and build
+        run: |
+          npm test
+          npm run build
+
+      - name: Set unique canary version
+        run: |
+          BASE_VERSION=$(node -p "require('./package.json').version")
+          CANARY_VERSION="${BASE_VERSION}-ci.${GITHUB_RUN_ID}"
+          echo "CANARY_VERSION=$CANARY_VERSION" >> "$GITHUB_ENV"
+
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const canaryVersion = process.env.CANARY_VERSION;
+          pkg.version = canaryVersion;
+          pkg.private = false;
+          fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+
+          const lockPath = 'package-lock.json';
+          if (fs.existsSync(lockPath)) {
+            const lock = JSON.parse(fs.readFileSync(lockPath, 'utf8'));
+            lock.version = canaryVersion;
+            if (lock.packages && lock.packages['']) {
+              lock.packages[''].version = canaryVersion;
+            }
+            fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + '\n');
+          }
+          NODE
+
+      - name: Publish canary to npm (real publish)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --tag ci-test --access public
+
+      - name: Verify canary is published
+        run: npm view "@ce-rise/hex-core-sdk-typescript@$CANARY_VERSION" version
+
+      - name: Deprecate canary version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm deprecate "@ce-rise/hex-core-sdk-typescript@$CANARY_VERSION" "CI canary build - do not use"
