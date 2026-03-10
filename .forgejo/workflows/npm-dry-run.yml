@@ -1,76 +1,76 @@
 name: NPM Publish Dry Run
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
-  dry-run:
-    runs-on: codeberg-small
+    dry-run:
+        runs-on: codeberg-small
 
-    steps:
-      - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        steps:
+            - name: Checkout
+              uses: https://github.com/actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: https://github.com/actions/setup-node@v4
-        with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
-          cache: npm
+            - name: Setup Node.js
+              uses: https://github.com/actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  registry-url: "https://registry.npmjs.org"
+                  cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Verify npm auth
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          npm whoami
-          npm ping
+            - name: Verify npm auth
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+              run: |
+                  npm whoami
+                  npm ping
 
-      - name: Run tests
-        run: npm test
+            - name: Run tests
+              run: npm test
 
-      - name: Build package
-        run: npm run build
+            - name: Build package
+              run: npm run build
 
-      - name: Pack npm tarball (JSON metadata)
-        run: |
-          npm pack --json > pack-result.json
-          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('pack-result.json','utf8'))[0];console.log('TARBALL='+p.filename)" >> "$GITHUB_ENV"
+            - name: Pack npm tarball (JSON metadata)
+              run: |
+                  npm pack --json > pack-result.json
+                  node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('pack-result.json','utf8'))[0];console.log('TARBALL='+p.filename)" >> "$GITHUB_ENV"
 
-      - name: List tarball contents
-        run: tar -tf "$TARBALL" > tarball-contents.txt
+            - name: List tarball contents
+              run: tar -tf "$TARBALL" > tarball-contents.txt
 
-      - name: Smoke test install from tarball
-        run: |
-          rm -rf .ci-smoke
-          mkdir .ci-smoke
-          cd .ci-smoke
-          npm init -y
-          npm install "../$TARBALL"
-          node -e "const sdk=require('@ce-rise/hex-core-sdk-typescript'); if (!sdk || typeof sdk !== 'object') { process.exit(1) } console.log('SDK exports:', Object.keys(sdk).length)"
+            - name: Smoke test install from tarball
+              run: |
+                  rm -rf ci-smoke
+                  mkdir ci-smoke
+                  cd ci-smoke
+                  npm init -y
+                  npm install "../$TARBALL"
+                  node -e "const sdk=require('@ce-rise/hex-core-sdk-typescript'); if (!sdk || typeof sdk !== 'object') { process.exit(1) } console.log('SDK exports:', Object.keys(sdk).length)"
 
-      - name: Check version is not already published
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          if npm view "@ce-rise/hex-core-sdk-typescript@$VERSION" version >/dev/null 2>&1; then
-            echo "Version $VERSION is already published on npm."
-            exit 1
-          fi
-          echo "Version $VERSION is not published yet."
+            - name: Check version is not already published
+              run: |
+                  VERSION=$(node -p "require('./package.json').version")
+                  if npm view "@ce-rise/hex-core-sdk-typescript@$VERSION" version >/dev/null 2>&1; then
+                    echo "Version $VERSION is already published on npm."
+                    exit 1
+                  fi
+                  echo "Version $VERSION is not published yet."
 
-      - name: Dry-run publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --dry-run --access public
+            - name: Dry-run publish to npm
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+              run: npm publish --dry-run --access public
 
-      - name: Upload dry-run artifacts
-        if: always()
-        uses: https://github.com/actions/upload-artifact@v4
-        with:
-          name: npm-dry-run-artifacts
-          path: |
-            pack-result.json
-            tarball-contents.txt
-            *.tgz
+            - name: Upload dry-run artifacts
+              if: always()
+              uses: https://github.com/actions/upload-artifact@v4
+              with:
+                  name: npm-dry-run-artifacts
+                  path: |
+                      pack-result.json
+                      tarball-contents.txt
+                      *.tgz
