@@ -20,3 +20,4 @@ Generated from `crates/api/src/openapi.json`.
 - [ValidateRequest](models/ValidateRequest.md)
 - [ValidationReport](models/ValidationReport.md)
 - [ValidationResult](models/ValidationResult.md)
+- [VersionResponse](models/VersionResponse.md)

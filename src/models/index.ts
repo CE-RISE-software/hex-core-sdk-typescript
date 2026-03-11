@@ -12,3 +12,4 @@ export * from './Record';
 export * from './ValidateRequest';
 export * from './ValidationReport';
 export * from './ValidationResult';
+export * from './VersionResponse';
