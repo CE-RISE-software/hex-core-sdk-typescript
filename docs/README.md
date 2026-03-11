@@ -11,6 +11,7 @@ Generated from `crates/api/src/openapi.json`.
 - [CreateRequest](models/CreateRequest.md)
 - [ErrorResponse](models/ErrorResponse.md)
 - [HealthResponse](models/HealthResponse.md)
+- [ModelCountResponse](models/ModelCountResponse.md)
 - [ModelVersion](models/ModelVersion.md)
 - [ModelsResponse](models/ModelsResponse.md)
 - [QueryRequest](models/QueryRequest.md)

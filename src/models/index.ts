@@ -3,6 +3,7 @@
 export * from './CreateRequest';
 export * from './ErrorResponse';
 export * from './HealthResponse';
+export * from './ModelCountResponse';
 export * from './ModelVersion';
 export * from './ModelsResponse';
 export * from './QueryRequest';
