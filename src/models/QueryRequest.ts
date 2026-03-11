@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { RecordQueryFilter } from './RecordQueryFilter';
+import {
+    RecordQueryFilterFromJSON,
+    RecordQueryFilterFromJSONTyped,
+    RecordQueryFilterToJSON,
+    RecordQueryFilterToJSONTyped,
+} from './RecordQueryFilter';
+
 /**
  * 
  * @export
@@ -20,11 +28,11 @@ import { mapValues } from '../runtime';
  */
 export interface QueryRequest {
     /**
-     * Adapter-specific filter object for query execution.
-     * @type {{ [key: string]: any; }}
+     * 
+     * @type {RecordQueryFilter}
      * @memberof QueryRequest
      */
-    filter: { [key: string]: any; };
+    filter: RecordQueryFilter;
 }
 
 /**
@@ -45,7 +53,7 @@ export function QueryRequestFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'filter': json['filter'],
+        'filter': RecordQueryFilterFromJSON(json['filter']),
     };
 }
 
@@ -60,7 +68,7 @@ export function QueryRequestToJSONTyped(value?: QueryRequest | null, ignoreDiscr
 
     return {
         
-        'filter': value['filter'],
+        'filter': RecordQueryFilterToJSON(value['filter']),
     };
 }
 
