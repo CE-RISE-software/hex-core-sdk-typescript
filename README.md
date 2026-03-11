@@ -1,7 +1,7 @@
 # CE-RISE TypeScript Software Development Kit for Hexagonal Core Service
 
 [![NPM](https://nodei.co/npm/@ce-rise/hex-core-sdk-typescript.svg?style=shields)](https://www.npmjs.com/package/@ce-rise/hex-core-sdk-typescript)
-[![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18954440.svg)](https://doi.org/10.5281/zenodo.18954440)
 
 A TypeScript SDK for the CE-RISE Hex Core Service:
 https://codeberg.org/CE-RISE-software/hex-core-service
