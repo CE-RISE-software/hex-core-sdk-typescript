@@ -26,11 +26,6 @@
             "identifier": "https://codeberg.org/CE-RISE-software/hex-core-sdk-typescript",
             "relation": "isSupplementTo",
             "resource_type": "software"
-        },
-        {
-            "identifier": "https://www.npmjs.com/package/@ce-rise/hex-core-sdk-typescript",
-            "relation": "isDocumentedBy",
-            "resource_type": "publication-technicalnote"
         }
     ]
 }
